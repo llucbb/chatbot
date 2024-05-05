@@ -30,9 +30,7 @@ public class ChatController {
       throw new RuntimeException("Message or file with message is mandatory");
     }
 
-
-    var responseMessage =
-        chatService.generate(message, messageEnvelope.model());
+    var responseMessage = chatService.generate(message, messageEnvelope.model());
     documentService.storeResponseMessage(responseMessage);
     return responseMessage;
   }
