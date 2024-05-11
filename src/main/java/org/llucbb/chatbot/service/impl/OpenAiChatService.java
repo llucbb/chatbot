@@ -1,5 +1,6 @@
 package org.llucbb.chatbot.service.impl;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.llucbb.chatbot.service.ChatService;
@@ -20,8 +21,13 @@ public class OpenAiChatService implements ChatService {
   @Override
   public String generate(String message, String model) {
     log.debug("->generate");
-    var chatClient =
-        new OpenAiChatClient(openAiApi, OpenAiChatOptions.builder().withModel(model).build());
+    OpenAiChatClient chatClient;
+    if (StringUtils.isBlank(model)) {
+      chatClient = new OpenAiChatClient(openAiApi);
+    } else {
+      chatClient =
+          new OpenAiChatClient(openAiApi, OpenAiChatOptions.builder().withModel(model).build());
+    }
     return chatClient.call(message);
   }
 }
